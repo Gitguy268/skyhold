@@ -19,6 +19,33 @@ Skyhold is for files you want off your computer but not lost: old tax returns, f
 
 It is one Go binary with three faces: plain CLI commands, a terminal UI (run `skyhold` with no command), and a web UI on localhost (`skyhold serve`). Clouds come from [rclone](https://rclone.org), so S3, Backblaze B2, Google Drive, OneDrive, Dropbox, WebDAV, SFTP and about 60 more all work.
 
+<!-- run-steps:start -->
+## Run it locally, step by step
+
+1. **Install [Go](https://go.dev/dl/) 1.27** or newer.
+
+2. **Get the code:**
+
+   ```sh
+   git clone https://github.com/Gitguy268/skyhold.git
+   cd skyhold
+   ```
+
+3. **Build it** (the first build takes a few minutes):
+
+   ```sh
+   go build -trimpath -ldflags=-s -o skyhold ./cmd/skyhold
+   ```
+
+4. **Run it:**
+
+   ```sh
+   ./skyhold --help
+   ```
+
+   The [Quick start](#quick-start) section below walks through your first backup.
+<!-- run-steps:end -->
+
 ## How it works
 
 | Step | Command | What happens |
