@@ -1,0 +1,12 @@
+/skyhold
+/skyhold.exe
+/dist/
+/third_party/
+*.test
+*.out
+.DS_Store
+.env
+.env.*
+.vercel/
+!.env.example
+node_modules/

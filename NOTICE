@@ -1,0 +1,313 @@
+Skyhold
+Copyright (c) 2026 Lucas Van De Weerd. Licensed under the MIT License (see LICENSE).
+
+The MIT grant covers Skyhold's own code only. The skyhold binary compiles in
+the third-party Go modules below, each under its own licence (see go.mod for
+exact versions). Skyhold is not affiliated with or endorsed by any of these
+projects or by any cloud provider.
+
+Direct dependencies
+- rclone, Copyright (C) 2012 by Nick Craig-Wood. MIT License. https://github.com/rclone/rclone
+- age, Copyright 2019 The age Authors and 2019 Google LLC. BSD 3-Clause License. https://github.com/FiloSottile/age
+- Bubble Tea, Bubbles and Lip Gloss, Copyright (c) Charmbracelet, Inc. MIT License.
+  https://github.com/charmbracelet
+- Cobra, Copyright 2013-2023 The Cobra Authors. Apache License 2.0.
+  https://github.com/spf13/cobra
+- pflag, Copyright (c) 2012 Alex Ogier and (c) 2012 The Go Authors. BSD 3-Clause
+  License. https://github.com/spf13/pflag
+- go-keyring, Copyright (c) 2016 Zalando SE. MIT License. https://github.com/zalando/go-keyring
+- flock, Copyright (c) 2018-2025 The Gofrs, (c) 2015-2020 Tim Heckman. BSD 3-Clause
+  License. https://github.com/gofrs/flock
+- golang.org/x/crypto and x/term, Copyright 2009 The Go Authors. BSD 3-Clause License.
+
+Weak copyleft (used unmodified)
+The modules below are under the Mozilla Public License 2.0. They are compiled in
+unmodified; their source is available at the addresses below and in the Go
+module proxy. rclone's S3, FTP, HDFS and Files.com backends need them.
+- github.com/hashicorp/errwrap (https://github.com/hashicorp/errwrap)
+- github.com/hashicorp/go-cleanhttp (https://github.com/hashicorp/go-cleanhttp)
+- github.com/hashicorp/go-multierror (https://github.com/hashicorp/go-multierror)
+- github.com/hashicorp/go-retryablehttp (https://github.com/hashicorp/go-retryablehttp)
+- github.com/hashicorp/go-uuid (https://github.com/hashicorp/go-uuid)
+
+Left out on purpose
+- rclone's SMB backend is not compiled in, because its dependency
+  github.com/cloudsoda/sddl is under the LGPL-3.0.
+
+All compiled-in modules, by licence
+(github.com/mattn/go-localereader v0.0.1 has no LICENSE file; its README and
+repository state the MIT License.)
+
+MIT (114)
+- github.com/Azure/azure-sdk-for-go/sdk/azcore
+- github.com/Azure/azure-sdk-for-go/sdk/azidentity
+- github.com/Azure/azure-sdk-for-go/sdk/internal
+- github.com/Azure/azure-sdk-for-go/sdk/storage/azblob
+- github.com/Azure/azure-sdk-for-go/sdk/storage/azfile
+- github.com/Azure/go-ntlmssp
+- github.com/AzureAD/microsoft-authentication-library-for-go/apps
+- github.com/FilenCloudDienste/filen-sdk-go/filen
+- github.com/Files-com/files-sdk-go/v3
+- github.com/Max-Sum/base32768
+- github.com/Microsoft/go-winio
+- github.com/ProtonMail/gluon
+- github.com/ProtonMail/go-srp
+- github.com/ProtonMail/gopenpgp/v3
+- github.com/a1ex3/zstd-seekable-format-go/pkg
+- github.com/aalpar/deheap
+- github.com/adrg/xdg
+- github.com/anchore/go-lzo
+- github.com/aymanbagabas/go-osc52/v2
+- github.com/beorn7/perks/quantile
+- github.com/boombuler/barcode
+- github.com/bradenaw/juniper
+- github.com/buengese/sgzip
+- github.com/buger/jsonparser
+- github.com/calebcase/tmpfile
+- github.com/cespare/xxhash/v2
+- github.com/charmbracelet/bubbles
+- github.com/charmbracelet/bubbletea
+- github.com/charmbracelet/colorprofile
+- github.com/charmbracelet/lipgloss
+- github.com/charmbracelet/x/ansi
+- github.com/charmbracelet/x/cellbuf
+- github.com/charmbracelet/x/term
+- github.com/chilts/sid
+- github.com/clipperhouse/displaywidth
+- github.com/clipperhouse/stringish
+- github.com/clipperhouse/uax29/v2/graphemes
+- github.com/cloudinary/cloudinary-go/v2
+- github.com/colinmarc/hdfs/v2
+- github.com/creasty/defaults
+- github.com/cronokirby/saferith
+- github.com/danieljoos/wincred
+- github.com/diskfs/go-diskfs
+- github.com/dromara/dongle/md2
+- github.com/dropbox/dropbox-sdk-go-unofficial/v6/dropbox
+- github.com/emersion/go-message
+- github.com/emersion/go-vcard
+- github.com/erikgeiser/coninput
+- github.com/felixge/httpsnoop
+- github.com/gabriel-vasile/mimetype
+- github.com/go-chi/chi/v5
+- github.com/go-ole/go-ole
+- github.com/go-playground/locales
+- github.com/go-playground/universal-translator
+- github.com/go-playground/validator/v10
+- github.com/go-resty/resty/v2
+- github.com/go-viper/mapstructure/v2
+- github.com/goccy/go-json
+- github.com/golang-jwt/jwt/v4
+- github.com/golang-jwt/jwt/v5
+- github.com/internxt/rclone-adapter
+- github.com/jtolio/noiseconn
+- github.com/klauspost/compress
+- github.com/klauspost/compress/zstd/internal/xxhash
+- github.com/klauspost/cpuid/v2
+- github.com/koofr/go-httpclient
+- github.com/koofr/go-koofrclient
+- github.com/leodido/go-urn
+- github.com/lucasb-eyer/go-colorful
+- github.com/mailru/easyjson
+- github.com/mattn/go-colorable
+- github.com/mattn/go-isatty
+- github.com/mattn/go-localereader
+- github.com/mattn/go-runewidth
+- github.com/mitchellh/go-homedir
+- github.com/muesli/ansi
+- github.com/muesli/cancelreader
+- github.com/muesli/termenv
+- github.com/ncw/swift/v2
+- github.com/panjf2000/ants/v2
+- github.com/patrickmn/go-cache
+- github.com/peterh/liner
+- github.com/putdotio/go-putio/putio
+- github.com/rclone/Proton-API-Bridge
+- github.com/rclone/go-proton-api
+- github.com/rclone/rclone
+- github.com/relvacode/iso8601
+- github.com/rfjakob/eme
+- github.com/rivo/uniseg
+- github.com/sabhiram/go-gitignore
+- github.com/samber/lo
+- github.com/sirupsen/logrus
+- github.com/skratchdot/open-golang/open
+- github.com/sony/gobreaker/v2
+- github.com/stretchr/testify
+- github.com/t3rm1n4l/go-mega
+- github.com/tyler-smith/go-bip39
+- github.com/xo/terminfo
+- github.com/youmark/pkcs8
+- github.com/yusufpapurcu/wmi
+- github.com/zalando/go-keyring
+- github.com/zalando/go-keyring/internal/shellescape
+- github.com/zeebo/errs
+- go.etcd.io/bbolt
+- go.yaml.in/yaml/v3
+- gopkg.in/natefinch/lumberjack.v2
+- gopkg.in/yaml.v3
+- sigs.k8s.io/yaml/goyaml.v2
+- storj.io/common
+- storj.io/drpc
+- storj.io/eventkit
+- storj.io/infectious
+- storj.io/picobuf
+- storj.io/uplink
+
+Apache-2.0 (73)
+- cloud.google.com/go/auth
+- cloud.google.com/go/auth/oauth2adapt
+- cloud.google.com/go/compute/metadata
+- github.com/IBM/go-sdk-core/v5/core
+- github.com/abbot/go-http-auth
+- github.com/apache/arrow-go/v18
+- github.com/aws/aws-sdk-go-v2
+- github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream
+- github.com/aws/aws-sdk-go-v2/config
+- github.com/aws/aws-sdk-go-v2/credentials
+- github.com/aws/aws-sdk-go-v2/feature/ec2/imds
+- github.com/aws/aws-sdk-go-v2/feature/s3/manager
+- github.com/aws/aws-sdk-go-v2/internal/configsources
+- github.com/aws/aws-sdk-go-v2/internal/endpoints/v2
+- github.com/aws/aws-sdk-go-v2/internal/v4a
+- github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding
+- github.com/aws/aws-sdk-go-v2/service/internal/checksum
+- github.com/aws/aws-sdk-go-v2/service/internal/presigned-url
+- github.com/aws/aws-sdk-go-v2/service/internal/s3shared
+- github.com/aws/aws-sdk-go-v2/service/s3
+- github.com/aws/aws-sdk-go-v2/service/signin
+- github.com/aws/aws-sdk-go-v2/service/sso
+- github.com/aws/aws-sdk-go-v2/service/ssooidc
+- github.com/aws/aws-sdk-go-v2/service/sts
+- github.com/aws/smithy-go
+- github.com/coreos/go-semver/semver
+- github.com/coreos/go-systemd/v22
+- github.com/coreos/go-systemd/v22/daemon
+- github.com/ebitengine/purego
+- github.com/go-git/go-billy/v5
+- github.com/go-logr/logr
+- github.com/go-logr/stdr
+- github.com/go-openapi/errors
+- github.com/go-openapi/strfmt
+- github.com/google/btree
+- github.com/google/flatbuffers/go
+- github.com/google/s2a-go
+- github.com/googleapis/enterprise-certificate-proxy/client
+- github.com/inconshreveable/mousetrap
+- github.com/jcmturner/aescts/v2
+- github.com/jcmturner/dnsutils/v2
+- github.com/jcmturner/goidentity/v6
+- github.com/jcmturner/gokrb5/v8
+- github.com/jcmturner/rpc/v2
+- github.com/klauspost/compress
+- github.com/kylelemons/godebug
+- github.com/lanrat/extsort
+- github.com/oklog/ulid/v2
+- github.com/oracle/oci-go-sdk/v65
+- github.com/pengsrc/go-shared
+- github.com/pquerna/otp
+- github.com/prometheus/client_golang/prometheus
+- github.com/prometheus/client_model/go
+- github.com/prometheus/common
+- github.com/prometheus/procfs
+- github.com/spacemonkeygo/monkit/v3
+- github.com/spf13/cobra
+- github.com/unknwon/goconfig
+- github.com/wk8/go-ordered-map/v2
+- github.com/xanzy/ssh-agent
+- github.com/yunify/qingstor-sdk-go/v3
+- go.opentelemetry.io/auto/sdk
+- go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp
+- go.opentelemetry.io/otel
+- go.opentelemetry.io/otel/metric
+- go.opentelemetry.io/otel/trace
+- go.yaml.in/yaml/v2
+- google.golang.org/genproto/googleapis/rpc
+- google.golang.org/grpc
+- gopkg.in/validator.v2
+- gopkg.in/yaml.v2
+- moul.io/http2curl/v2
+- sigs.k8s.io/yaml/goyaml.v2
+
+BSD-3-Clause (51)
+- filippo.io/age
+- filippo.io/hpke
+- github.com/ProtonMail/bcrypt
+- github.com/ProtonMail/go-crypto
+- github.com/PuerkitoBio/goquery
+- github.com/apache/arrow-go/v18
+- github.com/appscode/go-querystring/query
+- github.com/atotto/clipboard
+- github.com/aws/aws-sdk-go-v2/internal/sync/singleflight
+- github.com/aws/smithy-go/internal/sync/singleflight
+- github.com/bahlo/generic-list-go
+- github.com/cloudflare/circl
+- github.com/flynn/noise
+- github.com/go-darwin/apfs
+- github.com/gofrs/flock
+- github.com/gogo/protobuf
+- github.com/google/uuid
+- github.com/googleapis/gax-go/v2
+- github.com/gorilla/schema
+- github.com/jcmturner/gofork
+- github.com/jzelinskie/whirlpool
+- github.com/klauspost/compress
+- github.com/klauspost/compress/internal/snapref
+- github.com/kr/fs
+- github.com/lpar/calendar
+- github.com/munnerz/goautoneg
+- github.com/pierrec/lz4/v4
+- github.com/shirou/gopsutil/v4
+- github.com/spf13/pflag
+- github.com/stretchr/testify/internal/difflib
+- github.com/tklauser/go-sysconf
+- github.com/ulikunitz/xz
+- go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp
+- go.opentelemetry.io/otel
+- go.opentelemetry.io/otel/metric
+- go.opentelemetry.io/otel/trace
+- golang.org/x/crypto
+- golang.org/x/exp
+- golang.org/x/image
+- golang.org/x/net
+- golang.org/x/oauth2
+- golang.org/x/sync
+- golang.org/x/sys
+- golang.org/x/term
+- golang.org/x/text
+- golang.org/x/time/rate
+- google.golang.org/api
+- google.golang.org/api/internal/third_party/uritemplates
+- google.golang.org/protobuf
+- sigs.k8s.io/yaml/goyaml.v2
+- storj.io/picobuf/internal/protowire
+
+BSD-2-Clause (8)
+- github.com/andybalholm/cascadia
+- github.com/godbus/dbus/v5
+- github.com/pkg/browser
+- github.com/pkg/errors
+- github.com/pkg/sftp
+- github.com/pkg/xattr
+- github.com/zeebo/xxh3
+- storj.io/infectious
+
+ISC (3)
+- github.com/jlaffaye/ftp
+- github.com/stretchr/testify/internal/spew
+- storj.io/common/base58
+
+CC0-1.0 (1)
+- github.com/zeebo/blake3
+
+UPL-1.0 (1)
+- github.com/oracle/oci-go-sdk/v65
+
+Full licence texts
+Each module's licence file is in its source. To collect them all:
+  go install github.com/google/go-licenses/v2@v2.0.1
+  GOROOT=$(go env GOROOT) go-licenses save ./cmd/skyhold --save_path=third_party
+
+Images
+The screenshots in docs/images are of Skyhold itself, made by the author with
+demo files, and are under the same MIT License.

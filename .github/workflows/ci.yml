@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      # Never touch a real keychain on the runner.
+      SKYHOLD_KEYRING: file
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: gofmt
+        if: runner.os != 'Windows'
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+
+      - run: go vet ./...
+
+      - run: go test -race ./...
+
+      - name: Build
+        shell: bash
+        run: CGO_ENABLED=0 go build -trimpath -ldflags=-s -o skyhold${{ runner.os == 'Windows' && '.exe' || '' }} ./cmd/skyhold
+
+      - name: Smoke test (add, push, verify, release, restore)
+        shell: bash
+        run: |
+          set -eux
+          export SKYHOLD_HOME="$RUNNER_TEMP/home"
+          src="$RUNNER_TEMP/src"; cloud="$RUNNER_TEMP/cloud"
+          mkdir -p "$src/sub" "$cloud"
+          echo alpha > "$src/a.txt"; echo beta > "$src/sub/b.txt"
+          j=./skyhold
+          printf 'smoke-pass\nsmoke-pass\n' | $j init
+          $j remote add disk "$cloud"
+          $j add "$src"
+          $j push
+          $j verify
+          echo smoke-pass | $j release
+          test ! -e "$src/a.txt" && test ! -e "$src/sub/b.txt"
+          $j restore
+          grep -qx alpha "$src/a.txt" && grep -qx beta "$src/sub/b.txt"
+
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      # Fails on GPL/LGPL and other restricted licences, e.g. if an rclone
+      # upgrade brings one in. MPL-2.0 ("reciprocal") is allowed; see NOTICE.
+      - name: Check dependency licences
+        run: |
+          go install github.com/google/go-licenses/v2@v2.0.1
+          for os in linux darwin windows; do
+            GOOS=$os GOROOT=$(go env GOROOT) go-licenses check ./cmd/skyhold \
+              --ignore github.com/Gitguy268/skyhold \
+              --ignore github.com/mattn/go-localereader \
+              --disallowed_types=forbidden,restricted,unknown
+          done

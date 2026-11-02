@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skyhold</title>
+<meta name="description" content="Stage files, back them up to any cloud, then drop the local copies.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e8590c'/%3E%3Cpath d='M9 20h14l-3 5h-8zM16 6v11M11 11l5-5 5 5' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #f6f5f2; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6a66; --line: #e3e1db;
+  --accent: #e8590c; --accent-ink: #ffffff; --ok: #2b8a3e; --warn: #b7791f; --bad: #c92a2a;
+  --row: #faf9f6; --chip: #efede8; --focus: #e8590c55;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151514; --panel: #1f1f1d; --ink: #ecebe7; --muted: #a09e98; --line: #34332f;
+    --accent: #ff7a33; --accent-ink: #1a0d05; --ok: #69db7c; --warn: #fcc419; --bad: #ff6b6b;
+    --row: #252522; --chip: #2c2b28; --focus: #ff7a3355; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151514; --panel: #1f1f1d; --ink: #ecebe7; --muted: #a09e98; --line: #34332f;
+  --accent: #ff7a33; --accent-ink: #1a0d05; --ok: #69db7c; --warn: #fcc419; --bad: #ff6b6b;
+  --row: #252522; --chip: #2c2b28; --focus: #ff7a3355; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 24px 16px 96px; }
+header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+header h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+header p { margin: 0; color: var(--muted); flex: 1 1 260px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { background: var(--chip); border-radius: 999px; padding: 2px 10px; font-size: 13px; color: var(--muted); }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+section h2 { font-size: 16px; margin: 0 0 4px; display: flex; gap: 8px; align-items: baseline; }
+section h2 .n { color: var(--accent); font-variant-numeric: tabular-nums; }
+.hint { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.row > .grow { flex: 1 1 220px; min-width: 0; }
+input[type=text], input[type=password] { font: inherit; color: inherit; background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; width: 100%; }
+input:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
+button { font: inherit; border: 1px solid var(--line); background: var(--chip); color: var(--ink);
+  border-radius: 8px; padding: 7px 14px; cursor: pointer; white-space: nowrap; }
+button:hover:not(:disabled) { border-color: var(--muted); }
+button:disabled { opacity: .5; cursor: default; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button.danger { background: var(--bad); color: #fff; border-color: var(--bad); font-weight: 600; }
+button.link { background: none; border: none; padding: 2px 4px; color: var(--accent); }
+.list { border: 1px solid var(--line); border-radius: 8px; max-height: 340px; overflow: auto; margin: 10px 0; }
+.list label, .list .item { display: flex; gap: 10px; align-items: center; padding: 6px 10px; border-top: 1px solid var(--line); min-width: 0; }
+.list > :first-child { border-top: none; }
+.list label:nth-child(even), .list .item:nth-child(even) { background: var(--row); }
+.name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dir { color: var(--accent); cursor: pointer; }
+.meta { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.state { font-size: 12px; border-radius: 999px; padding: 1px 8px; background: var(--chip); white-space: nowrap; }
+.state.verified { color: var(--ok); } .state.uploaded { color: var(--warn); }
+.empty { color: var(--muted); padding: 14px 10px; text-align: center; }
+.path { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+.note { border-left: 3px solid var(--warn); padding: 6px 10px; margin: 8px 0; background: var(--row); font-size: 14px; overflow-wrap: anywhere; white-space: pre-line; }
+.note.bad { border-color: var(--bad); } .note.ok { border-color: var(--ok); }
+.key { font: 600 18px/1.4 ui-monospace, Menlo, monospace; letter-spacing: .04em; padding: 12px; border-radius: 8px;
+  background: var(--row); border: 1px dashed var(--accent); word-break: break-all; margin: 10px 0; }
+#bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line);
+  padding: 10px 16px; display: none; }
+#bar.on { display: block; }
+#bar .inner { max-width: 980px; margin: 0 auto; display: flex; gap: 12px; align-items: center; }
+progress { flex: 0 0 160px; accent-color: var(--accent); }
+#bar .name { font-size: 13px; color: var(--muted); }
+.hidden { display: none !important; }
+@media (max-width: 560px) { progress { flex-basis: 90px; } .meta.size { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Skyhold</h1>
+    <p>Stage files, back them up to any cloud, then drop the local copies.</p>
+    <div class="chips" id="chips"></div>
+  </header>
+
+  <div id="auth" class="note bad hidden">No access token. Open the full URL that <span class="path">skyhold serve</span> printed.</div>
+
+  <section id="setup" class="hidden">
+    <h2>Set up</h2>
+    <p class="hint">The release password is asked every time Skyhold deletes local files. It cannot be recovered, so pick one you will remember.</p>
+    <div class="row">
+      <div class="grow"><input type="password" id="pw1" placeholder="Release password (8+ characters)" autocomplete="new-password"></div>
+      <div class="grow"><input type="password" id="pw2" placeholder="Repeat password" autocomplete="new-password"></div>
+    </div>
+    <p><label><input type="checkbox" id="encrypt" checked> Encrypt names and contents in the cloud (recommended)</label></p>
+    <button class="primary" id="doInit">Set up</button>
+  </section>
+
+  <section id="keyBox" class="hidden">
+    <h2>Your cloud key</h2>
+    <p class="hint">Write this down and keep it away from this computer. With it and the remote you can recover your files on any machine. Without it nobody can decrypt the cloud copies, you included.</p>
+    <div class="key" id="keyText"></div>
+    <button class="primary" id="keyDone">I wrote it down</button>
+  </section>
+
+  <div id="app" class="hidden">
+    <section>
+      <h2>Clouds</h2>
+      <p class="hint">Anything rclone accepts: a remote from rclone.conf like <span class="path">b2:bucket/backup</span>, or a connection string like <span class="path">:sftp,host=nas.local,user=me:backups</span>. Stored in the OS keychain.</p>
+      <div class="list" id="remotes"></div>
+      <div class="row">
+        <div style="flex:0 1 140px"><input type="text" id="rName" placeholder="Name"></div>
+        <div class="grow"><input type="text" id="rSpec" placeholder="rclone remote" spellcheck="false"></div>
+        <button id="addRemote">Add cloud</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>1 · Pick files</h2>
+      <p class="hint">Picked files are copied into the encrypted vault. Folders are added with everything inside.</p>
+      <div class="row">
+        <button id="up" title="Parent folder">↑</button>
+        <div class="grow"><input type="text" id="cwd" class="path" spellcheck="false"></div>
+      </div>
+      <div class="list" id="browser"></div>
+      <button class="primary" id="addSel" disabled>Add to vault</button>
+      <div id="addOut"></div>
+    </section>
+
+    <section>
+      <h2>2 · Vault <span class="n" id="vaultN"></span></h2>
+      <p class="hint">Upload sends each file to every cloud. Verify checks the cloud copies byte for byte.</p>
+      <div class="list" id="vault"></div>
+      <div class="row">
+        <button class="primary" id="push">Upload</button>
+        <button id="verify">Verify</button>
+        <button id="forget" disabled>Remove from vault</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>3 · Release</h2>
+      <p class="hint">Checks every file in the cloud again, then destroys the vault key and deletes the vault and the original files. An original that changed since you added it is kept.</p>
+      <div id="preview"></div>
+      <div class="row">
+        <div class="grow"><input type="password" id="relPw" placeholder="Release password" autocomplete="current-password"></div>
+        <button class="danger" id="release">Delete local copies</button>
+      </div>
+      <div id="relOut"></div>
+    </section>
+
+    <section>
+      <h2>Released <span class="n" id="relN"></span></h2>
+      <p class="hint">Files that now live only in the cloud. Restore downloads them and checks each one.</p>
+      <div class="list" id="released"></div>
+      <div class="row">
+        <div class="grow"><input type="text" id="restoreTo" class="path" placeholder="Restore to original paths, or type a folder" spellcheck="false"></div>
+        <label class="meta"><input type="checkbox" id="overwrite"> overwrite</label>
+        <button id="restore" disabled>Restore</button>
+      </div>
+      <div id="restOut"></div>
+    </section>
+  </div>
+</main>
+
+<div id="bar"><div class="inner"><strong id="barStep"></strong><progress id="barProg" max="1" value="0"></progress><span class="name" id="barFile"></span></div></div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+let token = new URLSearchParams(location.hash.slice(1)).get("t");
+try { if (token) sessionStorage.setItem("jt", token); else token = sessionStorage.getItem("jt"); } catch (_) {}
+if (token) history.replaceState(null, "", location.pathname);
+
+function h(tag, props = {}, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat()) if (kid != null) el.append(kid);
+  return el;
+}
+async function api(method, path, body) {
+  const res = await fetch(path, { method, headers: { "X-Skyhold-Token": token || "", "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+const size = (n) => n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(1) + " KB" : n < 1073741824 ? (n / 1048576).toFixed(1) + " MB" : (n / 1073741824).toFixed(2) + " GB";
+function notes(box, items, cls) { box.replaceChildren(...items.map((t) => h("div", { class: "note " + (cls || "") }, t))); }
+function stateOf(e, remotes) {
+  const v = Object.keys(e.verified || {}).length, p = Object.keys(e.pushed || {}).length;
+  return remotes && v === remotes ? "verified" : remotes && p === remotes ? "uploaded" : "staged";
+}
+
+let status = null;
+const picked = new Set(), inVault = new Set(), inReleased = new Set();
+
+async function refresh() {
+  status = await api("GET", "/api/status");
+  $("setup").classList.toggle("hidden", status.initialized);
+  $("app").classList.toggle("hidden", !status.initialized || !$("keyBox").classList.contains("hidden"));
+  $("chips").replaceChildren(
+    h("span", { class: "chip" }, status.encrypt_cloud ? "cloud encrypted" : "cloud not encrypted"),
+    h("span", { class: "chip" }, (status.remotes || []).length + " cloud(s)"));
+  const remotes = status.remotes || [];
+  $("remotes").replaceChildren(...(remotes.length ? remotes.map((r) => h("div", { class: "item" },
+    h("strong", {}, r.name), h("span", { class: "name path" }, r.backend + " " + r.path),
+    h("button", { class: "link", onclick: () => removeRemote(r.name) }, "remove"))) : [h("div", { class: "empty" }, "No clouds yet")]));
+  const entries = status.entries || [];
+  const staged = entries.filter((e) => e.state === "staged"), released = entries.filter((e) => e.state === "released");
+  $("vaultN").textContent = staged.length || "";
+  $("relN").textContent = released.length || "";
+  renderChecks($("vault"), staged, inVault, (e) => [h("span", { class: "meta size" }, size(e.size)),
+    h("span", { class: "state " + stateOf(e, remotes.length) }, stateOf(e, remotes.length))], "Vault is empty", "forget");
+  renderChecks($("released"), released, inReleased, (e) => [h("span", { class: "meta" }, new Date(e.released).toLocaleString())], "Nothing released yet", "restore");
+  await loadPreview();
+}
+function renderChecks(box, entries, set, extra, empty, buttonId) {
+  for (const p of [...set]) if (!entries.some((e) => e.original === p)) set.delete(p);
+  box.replaceChildren(...(entries.length ? entries.map((e) => h("label", {},
+    h("input", { type: "checkbox", checked: set.has(e.original), onchange: (ev) => { ev.target.checked ? set.add(e.original) : set.delete(e.original); $(buttonId).disabled = !set.size; } }),
+    fileName(e.original), extra(e))) : [h("div", { class: "empty" }, empty)]));
+  $(buttonId).disabled = !set.size;
+}
+// File name first, folder after it dimmed, so a long path never hides the name.
+function fileName(p) {
+  const i = Math.max(p.lastIndexOf("/"), p.lastIndexOf("\\"));
+  return h("span", { class: "name", title: p }, h("strong", {}, p.slice(i + 1)), "  ", h("span", { class: "meta path" }, p.slice(0, i + 1)));
+}
+async function loadPreview() {
+  const p = await api("GET", "/api/preview");
+  const files = p.files || [], box = $("preview");
+  $("release").disabled = !files.length;
+  if (!files.length) { notes(box, ["Nothing staged to release."], "ok"); return; }
+  const lines = [files.length + " file(s) will be deleted from this computer; the copies stay on " + (p.remotes || []).join(", ") + "."];
+  if (p.unpushed) lines.push(p.unpushed + " file(s) are not uploaded yet. Release will refuse until they are.");
+  notes(box, lines);
+  for (const w of p.warnings || []) box.append(h("div", { class: "note" }, "Warning: " + w));
+}
+
+let cwd = "";
+async function browse(path) {
+  try {
+    const d = await api("GET", "/api/ls?path=" + encodeURIComponent(path || ""));
+    cwd = d.path; $("cwd").value = d.path; $("up").disabled = !d.parent; $("up").dataset.parent = d.parent;
+    $("browser").replaceChildren(...(d.entries.length ? d.entries.map((e) => h("label", {},
+      h("input", { type: "checkbox", checked: picked.has(e.path), onchange: (ev) => { ev.target.checked ? picked.add(e.path) : picked.delete(e.path); updatePicked(); } }),
+      e.dir ? h("span", { class: "name dir", onclick: (ev) => { ev.preventDefault(); browse(e.path); } }, e.name + "/") : h("span", { class: "name" }, e.name),
+      h("span", { class: "meta size" }, e.dir ? "" : size(e.size)))) : [h("div", { class: "empty" }, "Empty folder")]));
+  } catch (err) { notes($("browser"), [err.message], "bad"); }
+}
+function updatePicked() { $("addSel").disabled = !picked.size; $("addSel").textContent = picked.size ? "Add " + picked.size + " to vault" : "Add to vault"; }
+
+async function run(path, body, done) {
+  try { await api("POST", path, body); } catch (err) { alertBox(err.message); return; }
+  $("bar").classList.add("on");
+  for (;;) {
+    await new Promise((r) => setTimeout(r, 400));
+    const j = await api("GET", "/api/job");
+    $("barStep").textContent = j.event.step || j.name;
+    $("barProg").value = j.event.of ? j.event.n / j.event.of : 0;
+    $("barFile").textContent = j.event.file || "";
+    if (!j.running) { $("bar").classList.remove("on"); await refresh(); done(j); return; }
+  }
+}
+function alertBox(msg) { notes($("relOut"), [msg], "bad"); $("relOut").scrollIntoView({ block: "nearest" }); }
+function issues(list) { return (list || []).map((i) => (i.file || "") + (i.remote ? " (" + i.remote + ")" : "") + ": " + i.problem); }
+
+$("doInit").onclick = async () => {
+  if ($("pw1").value !== $("pw2").value) { alert("Passwords do not match"); return; }
+  try {
+    const r = await api("POST", "/api/init", { password: $("pw1").value, encrypt: $("encrypt").checked });
+    $("pw1").value = $("pw2").value = "";
+    if (r.cloud_key) { $("keyText").textContent = r.cloud_key; $("keyBox").classList.remove("hidden"); }
+    await refresh(); browse("");
+  } catch (err) { alert(err.message); }
+};
+$("keyDone").onclick = () => { $("keyText").textContent = ""; $("keyBox").classList.add("hidden"); refresh(); };
+$("addRemote").onclick = async () => {
+  try { await api("POST", "/api/remotes", { name: $("rName").value.trim(), spec: $("rSpec").value.trim() }); $("rName").value = $("rSpec").value = ""; refresh(); }
+  catch (err) { alert(err.message); }
+};
+async function removeRemote(name) {
+  if (!confirm("Forget cloud " + name + "? Files already uploaded there stay.")) return;
+  try { await api("DELETE", "/api/remotes/" + encodeURIComponent(name)); refresh(); } catch (err) { alert(err.message); }
+}
+$("up").onclick = () => browse($("up").dataset.parent);
+$("cwd").onkeydown = (e) => { if (e.key === "Enter") browse($("cwd").value); };
+$("addSel").onclick = () => run("/api/add", { paths: [...picked] }, (j) => {
+  if (j.error) alertBox(j.error);
+  else { picked.clear(); updatePicked(); browse(cwd); notes($("addOut"), ["Added " + (j.result.added || []).length + " file(s).", ...issues(j.result.skipped).map((s) => "Skipped " + s)], "ok"); }
+});
+$("push").onclick = () => run("/api/push", undefined, (j) => { if (j.error || (j.result && j.result.problems && j.result.problems.length)) alertBox(j.error || issues(j.result.problems).join("\n")); });
+$("verify").onclick = () => run("/api/verify", undefined, (j) => {
+  if (j.error) alertBox(j.error);
+  else notes($("relOut"), j.result.problems && j.result.problems.length ? issues(j.result.problems) : ["All " + j.result.checked + " cloud copies verified."], j.result.problems && j.result.problems.length ? "bad" : "ok");
+});
+$("forget").onclick = async () => { try { await api("POST", "/api/forget", { paths: [...inVault] }); refresh(); } catch (err) { alertBox(err.message); } };
+$("release").onclick = () => {
+  const pw = $("relPw").value; $("relPw").value = "";
+  run("/api/release", { password: pw }, (j) => {
+    if (j.error) { notes($("relOut"), [j.error.split("\n")[0], ...issues(j.problems)], "bad"); return; }
+    const r = j.result, lines = ["Deleted " + (r.deleted || []).length + " original(s). The vault key and vault copies are gone."];
+    if ((r.already_gone || []).length) lines.push(r.already_gone.length + " original(s) were already gone.");
+    for (const k of issues(r.kept)) lines.push("Kept " + k);
+    for (const w of r.warnings || []) lines.push("Warning: " + w);
+    lines.push("Receipt: " + r.receipt);
+    notes($("relOut"), lines, "ok");
+    browse(cwd);
+  });
+};
+$("restore").onclick = () => run("/api/restore", { paths: [...inReleased], to: $("restoreTo").value.trim(), overwrite: $("overwrite").checked }, (j) => {
+  if (j.error) { notes($("restOut"), [j.error], "bad"); return; }
+  notes($("restOut"), ["Restored " + (j.result.restored || []).length + " file(s).", ...issues(j.result.problems)], j.result.problems && j.result.problems.length ? "bad" : "ok");
+  browse(cwd);
+});
+
+if (!token) $("auth").classList.remove("hidden");
+else refresh().then(() => { if (status.initialized) browse(""); }).catch((err) => { $("auth").textContent = err.message; $("auth").classList.remove("hidden"); });
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+name: Bug report
+description: Something in Skyhold does not work.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not paste your cloud key, release password, remote connection string or any credentials. Replace them with `REDACTED`.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: To reproduce
+      description: The commands you ran, or the screens and buttons you used.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: Interface
+      options:
+        - CLI
+        - TUI (skyhold with no command)
+        - Web UI (skyhold serve)
+    validations:
+      required: true
+  - type: input
+    id: backend
+    attributes:
+      label: Cloud backend
+      description: The rclone backend type only, e.g. s3 (Backblaze B2), drive, sftp. `skyhold remote list` shows it.
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - macOS
+        - Linux
+        - Windows
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Version
+      placeholder: "skyhold --version"
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Error messages, screenshots, or `skyhold status --json` with paths you'd rather not share removed.
