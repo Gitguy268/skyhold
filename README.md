@@ -23,6 +23,15 @@ It is one Go binary with three faces: plain CLI commands, a terminal UI (run `sk
 **Project page:** [gitguy268.github.io/skyhold](https://gitguy268.github.io/skyhold/) · [skyhold-nine.vercel.app](https://skyhold-nine.vercel.app)
 <!-- /live-links -->
 
+## Install with Homebrew
+
+```sh
+brew trust gitguy268/tap
+brew install gitguy268/tap/skyhold
+```
+
+Installs rclone too.
+
 <!-- run-steps:start -->
 ## Run it locally, step by step
 
